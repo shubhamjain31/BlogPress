@@ -6,10 +6,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Directory Theme by Bootstrapious</title>
+    <title>BlogPress - {% block title %}{% endblock %}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
+    
     <!-- Price Slider Stylesheets -->
     <link rel="stylesheet" href="/media/css/nouislider.css">
     <!-- Google fonts - Playfair Display-->
@@ -26,7 +27,6 @@
     <link rel="stylesheet" href="/media/css/custom.css">
     <script src="/media/js/main.js"> </script>
 
-
    </head>
   <body style="padding-top: 72px;">
     <input type="hidden" id="csrf" value="{{csrf_token}}">
@@ -35,7 +35,7 @@
       <nav class="navbar navbar-expand-lg fixed-top shadow navbar-light bg-white">
         <div class="container-fluid">
           <div class="d-flex align-items-center"><a class="navbar-brand py-1" href="/">
-          <h3>Code Keen Blog</h3>
+          <h3 class="text-info">BlogPress</h3>
           </div>
           <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
           <!-- Navbar Collapse -->
@@ -66,10 +66,7 @@
     </header>
    
 
-    {% block start %}
-
-
-    {% endblock %}
+    {% block start %} {% endblock %}
 
 
     <footer class="position-relative z-index-10 d-print-none">
@@ -78,7 +75,7 @@
         <div class="container">
           <div class="row align-items-center">
             <div class="col-md-6 text-center text-md-left">
-              <p class="text-sm mb-md-0">&copy; 2020, Your company.  All rights reserved.</p>
+              <p class="text-sm mb-md-0">&copy; 2021, Your company.  All rights reserved.</p>
             </div>
            
           </div>
@@ -86,8 +83,7 @@
       </div>
     </footer>
    
-    
+      {% block js %} {% endblock %}
   </body>
-
 
 </html>
