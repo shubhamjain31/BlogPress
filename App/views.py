@@ -1,6 +1,12 @@
-from django.shortcuts import render ,redirect
+from django.shortcuts import render ,redirect, HttpResponseRedirect
 from .form import *
 from django.contrib.auth import logout
+
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+
+from django.contrib import messages
+from BlogPress.decorators import get_ip
 
 # Create your views here.
 
@@ -15,6 +21,47 @@ def home(request):
 
 def login_view(request):
     return render(request ,'login.html')
+
+def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('/')
+
+    msg     = None
+    success = False
+
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+
+        agree = request.POST.get("agree")
+        if agree is None:
+            msg = 'Please Acccept Privacy Policy'
+            return render(request, "register.html", {"form": form, "msg" : msg, "success" : success })
+
+        if form.is_valid():
+            # post = form.save(commit=False)
+            # post.save()
+
+            # Profile(user=post).save()
+
+            username = form.cleaned_data.get("username")
+            email    = form.cleaned_data.get("email")
+            raw_password = form.cleaned_data.get("password1")
+            user     = authenticate(username=username, password=raw_password)
+
+            msg      = 'User created.'
+            success  = True
+
+            messages.success(request, 'Registration Completed Successfully. Kindly Login to Continue.')
+            return HttpResponseRedirect("/login/")
+
+        else:
+            print(form.errors)  
+    else:
+        form = SignUpForm()
+    return render(request ,'register.html' ,{"form": form, "msg" : msg, "success" : success })
+
+def policy(request):
+    return render(request ,'policy.html')
 
 def blog_detail(request ,slug):
     context = {}
@@ -110,9 +157,6 @@ def blog_delete(request ,id):
         print(e)
 
     return redirect('/see-blog/')
-
-def  register_view(request):
-    return render(request , 'register.html')
 
 def verify(request, token):
     try:

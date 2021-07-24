@@ -6,6 +6,29 @@
     <div class="row min-vh-100">
       <div class="col-md-8 col-lg-6 col-xl-5 d-flex align-items-center">
         <div class="w-100 py-5 px-md-5 px-xl-6 position-relative">
+
+          {% if messages %}
+            {% for message in messages %}
+            <div
+              class="alert {% if message.tags == 'error' %}alert-warning {% else %} alert-{{ message.tags }}{% endif %}"
+              role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+              {{message}}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% if msg %}
+            <div class="alert alert-warning text-left" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+              {{msg}}
+            </div>
+            {% else %}
+           
+            {% endif %}
          
           <div class="form-validate">
             <div class="form-group">
@@ -24,9 +47,9 @@
             <!-- Submit-->
             <button class="btn btn-lg btn-block btn-primary" onclick="login()">Sign in</button>
            
-            <p class="text-center"><small class="text-muted text-center">Don't have an account yet? <a href="signup.html">Sign Up                </a></small></p>
+            <p class="text-center"><small class="text-muted text-center">Don't have an account yet? <a href="/register/">Sign Up                </a></small></p>
           </div>
-          <a class="close-absolute mr-md-5 mr-xl-6 pt-5" href="index-2.html"> 
+          <a class="close-absolute mr-md-5 mr-xl-6 pt-5" href=""> 
             <svg class="svg-icon w-3rem h-3rem">
               <use xlink:href="#close-1"> </use>
             </svg></a>

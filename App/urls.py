@@ -7,6 +7,8 @@ urlpatterns = [
     path('login/' , login_view , name="login_view"),
     path('register/' , register_view , name="register_view"),
     path('logout-view/' , logout_view , name="logout_view"),
+
+    path('policy/' , policy , name="policy"),
     
     path('add-blog/' , add_blog, name="add_blog"),
     path('blog-detail/<slug>' , blog_detail , name="blog_detail"),
