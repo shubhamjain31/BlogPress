@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout-view/' , logout_view , name="logout_view"),
 
     path('policy/' , policy , name="policy"),
+    path('verification/<str:val>' , verification , name="verification"),
     
     path('add-blog/' , add_blog, name="add_blog"),
     path('blog-detail/<slug>' , blog_detail , name="blog_detail"),

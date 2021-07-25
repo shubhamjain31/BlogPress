@@ -6,7 +6,12 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
-from BlogPress.decorators import get_ip
+from BlogPress.decorators import *
+
+from cryptography.fernet import Fernet
+from cryptography import *
+import cryptography
+from django.core.mail import EmailMessage
 
 # Create your views here.
 
@@ -38,20 +43,40 @@ def register_view(request):
             return render(request, "register.html", {"form": form, "msg" : msg, "success" : success })
 
         if form.is_valid():
-            # post = form.save(commit=False)
-            # post.save()
+            post = form.save(commit=False)
+            post.save()
 
-            # Profile(user=post).save()
+            Profile(user=post).save()
 
             username = form.cleaned_data.get("username")
             email    = form.cleaned_data.get("email")
             raw_password = form.cleaned_data.get("password1")
+
+            token = encryption_key(post.pk)
+            user = User.objects.get(email=email)
+
             user     = authenticate(username=username, password=raw_password)
 
             msg      = 'User created.'
             success  = True
 
-            messages.success(request, 'Registration Completed Successfully. Kindly Login to Continue.')
+            subject  = 'BlogPress Email Verification'
+
+            body     = '<h1>Welcome!</h1>,<br><br>\
+                Thanks for signing up! We just need you to verify your email address to complete setting up your account.<br>\
+                <a href="http://127.0.0.1:8000/verification/' + str(token.decode())+'"><button>Verify My Email</button></a><br><br>\
+                For any questions, you can write to us at demo@gmail.com.<br><br> \
+                Thanks & Regards,<br>\
+                Team BlogPress<br>\
+                demo@gmail.com<br>'
+
+            msg = EmailMessage(subject, body, 'BlogPress', to=[email])
+            msg.content_subtype = "html"
+            msg.send()
+
+            email_verification(user=user, verification_link=token.decode(), ip_address=get_ip(request)).save()
+
+            messages.success(request, 'Registration Completed Successfully. Please Check Your Email.!')
             return HttpResponseRedirect("/login/")
 
         else:
@@ -62,6 +87,16 @@ def register_view(request):
 
 def policy(request):
     return render(request ,'policy.html')
+
+def verification(request, val):
+    pk_ = decryption_key(val)
+    
+    user_obj = Profile.objects.get(user=int(pk_))
+
+    user_obj.is_verified = True
+    user_obj.save()
+
+    return redirect('/')
 
 def blog_detail(request ,slug):
     context = {}
@@ -92,6 +127,7 @@ def add_blog(request):
         if request.method == 'POST':
             form = BlogForm(request.POST)
             print(request.FILES)
+            
             image = request.FILES['image']
             title = request.POST.get('title')
             user = request.user

@@ -14,6 +14,16 @@ class Profile(models.Model):
 
     def __str__(self):
         return str(self.user)
+
+class email_verification(models.Model):
+
+    user                        = models.ForeignKey(User, on_delete=models.CASCADE)
+    verification_link           = models.CharField(max_length=200)
+    created_date                = models.DateTimeField(auto_now_add=True)
+    ip_address                  = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.user)
     
 
 class BlogModel(models.Model):
