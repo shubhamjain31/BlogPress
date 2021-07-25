@@ -90,14 +90,20 @@ def policy(request):
 
 def verification(request, val):
     pk_ = decryption_key(val)
-    
-    user_obj = Profile.objects.get(user=int(pk_))
 
-    user_obj.is_verified = True
-    user_obj.save()
+    try:
+        user_obj = Profile.objects.get(user=int(pk_))
+
+        user_obj.is_verified = True
+        user_obj.save()
+        return redirect('/')
+
+    except Exception as e : 
+        print(e)
 
     return redirect('/')
 
+@login_required(login_url="/login/")
 def blog_detail(request ,slug):
     context = {}
     try:
@@ -107,6 +113,7 @@ def blog_detail(request ,slug):
         print(e)
     return render(request ,'blog_detail.html' ,context)
 
+@login_required(login_url="/login/")
 def see_blog(request):
 
     context = {}
@@ -120,34 +127,33 @@ def see_blog(request):
     print(context)
     return render(request ,'see_blog.html' ,context)
 
-
+@login_required(login_url="/login/")
 def add_blog(request):
     context = {'form' : BlogForm}
     try:
         if request.method == 'POST':
             form = BlogForm(request.POST)
-            print(request.FILES)
             
-            image = request.FILES['image']
+            image = request.FILES.get('image','')
             title = request.POST.get('title')
             user = request.user
             
             if form.is_valid():
                 content = form.cleaned_data['content']
-            
+
             blog_obj = BlogModel.objects.create(
                 user = user , title = title, 
-                content = content, image = image
+                content = content, image = image,
+                ip_address = get_ip(request), browser = get_browser(request)
             )
-            print(blog_obj)
             return redirect('/add-blog/')
 
     except Exception as e :
-        print(e)
+        print(e,'jddj')
     
     return render(request ,'add_blog.html' ,context)
 
-
+@login_required(login_url="/login/")
 def blog_update(request ,slug):
     context = {}
     try: 
@@ -182,6 +188,7 @@ def blog_update(request ,slug):
 
     return render(request ,'update_blog.html' ,context)
 
+@login_required(login_url="/login/")
 def blog_delete(request ,id):
     try:
         blog_obj = BlogModel.objects.get(id = id)
@@ -193,17 +200,3 @@ def blog_delete(request ,id):
         print(e)
 
     return redirect('/see-blog/')
-
-def verify(request, token):
-    try:
-        profile_obj = Profile.objects.filter(token = token).first()
-        
-        if profile_obj:
-            profile_obj.is_verified = True
-            profile_obj.save()
-        return redirect('/login/')
-
-    except Exception as e : 
-        print(e)
-    
-    return redirect('/')

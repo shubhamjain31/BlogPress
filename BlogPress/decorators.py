@@ -14,3 +14,6 @@ def decryption_key(val):
 
 def get_ip(request):
     return request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR', '')).split(',')[0].strip()
+
+def get_browser(request):
+    return request.META['HTTP_USER_AGENT']

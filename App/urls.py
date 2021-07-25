@@ -1,4 +1,3 @@
-
 from django.urls import path
 from .views import *
 
@@ -16,6 +15,4 @@ urlpatterns = [
     path('see-blog/' , see_blog , name="see_blog"),
     path('blog-delete/<id>' , blog_delete , name="blog_delete"),
     path('blog-update/<slug>/' , blog_update , name="blog_update"),
-    
-    path('verify/<token>/' , verify , name="verify")
 ]

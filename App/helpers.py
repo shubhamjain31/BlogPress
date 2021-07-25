@@ -13,7 +13,7 @@ def generate_random_string(N):
 
 def generate_slug(text):
     new_slug = slugify(text)
-    from home.models import BlogModel
+    from App.models import BlogModel
     
     if BlogModel.objects.filter(slug = new_slug).first():
         return generate_slug(text + generate_random_string(5))

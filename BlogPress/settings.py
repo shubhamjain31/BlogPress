@@ -52,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'BlogPress.middleware.URLMiddleware',
 ]
 
 ROOT_URLCONF = 'BlogPress.urls'
@@ -146,5 +147,6 @@ EMAIL_PORT              = config('EMAIL_PORT', cast=int)
 EMAIL_HOST_USER         = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD     = config('EMAIL_HOST_PASSWORD')
 
-# CRYPTOGRAPHY_KEY = config('CRYPTOGRAPHY_KEY')
-CRYPTOGRAPHY_KEY = 'yiQcaFi6IHpsjZIMIOY85w5amWZARdh2UOKoF2Iolxk='
+CRYPTOGRAPHY_KEY = config('CRYPTOGRAPHY_KEY')
+
+EXEMPT_URLS = ['/login/', '/register/']
