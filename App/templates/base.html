@@ -27,7 +27,16 @@
     <!-- <link rel="stylesheet" href="/media/css/custom.css"> -->
     <script src="/media/js/main.js"> </script>
 
+    <link href="/media/css/index.css" rel="stylesheet">
+
    </head>
+
+   <div class="topnav">
+    <a class="active" href="/">Home</a>
+    <a href="/profile/{{request.user}}">Profile</a>
+    <a href="#about">Settings</a>
+  </div>
+
   <body style="padding-top: 72px;">
     <input type="hidden" id="csrf" value="{{csrf_token}}">
     <header class="header">

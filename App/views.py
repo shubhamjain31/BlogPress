@@ -200,3 +200,7 @@ def blog_delete(request ,id):
         print(e)
 
     return redirect('/see-blog/')
+
+@login_required(login_url="/login/")
+def profile(request, name):
+    return render(request ,'profile.html' )

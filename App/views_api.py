@@ -26,7 +26,6 @@ class LoginView(APIView):
             
             
             check_user = User.objects.filter(username = data.get('username')).first()
-            print(check_user)
             
             if check_user is None:
                 response['message'] = 'invalid username , user not found'

@@ -17,6 +17,3 @@ class URLMiddleware:
         url = request.path
         if user and url in settings.EXEMPT_URLS:
             return redirect("/")
-
-        # if not user and (url != settings.HOME_URL and url not in settings.EXEMPT_URLS):
-        #     return redirect(settings.HOME_URL)
