@@ -17,4 +17,5 @@ urlpatterns = [
     path('blog-update/<slug>/' , blog_update , name="blog_update"),
 
     path('profile/<str:name>/' , profile , name="profile"),
+    path('settings/' , settings , name="settings"),
 ]

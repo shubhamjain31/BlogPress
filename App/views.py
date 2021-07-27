@@ -204,3 +204,7 @@ def blog_delete(request ,id):
 @login_required(login_url="/login/")
 def profile(request, name):
     return render(request ,'profile.html' )
+
+@login_required(login_url="/login/")
+def settings(request):
+    return render(request ,'settings.html' )

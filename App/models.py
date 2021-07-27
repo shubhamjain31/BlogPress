@@ -10,6 +10,7 @@ class Profile(models.Model):
     user 			= models.ForeignKey(User, on_delete=models.CASCADE)
     is_verified 	= models.BooleanField(default=False)
     token 			= models.CharField(max_length=100)
+    image           = models.ImageField(upload_to='media/images/', default='media/images/profile.png', blank=True)
     # about           = models.CharField(max_length=200)
     mobile 			= models.CharField(max_length=15)
 
