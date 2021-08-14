@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
 from BlogPress.decorators import *
+from validators import is_invalid
 
 from cryptography.fernet import Fernet
 from cryptography import *
@@ -207,4 +208,39 @@ def profile(request, name):
 
 @login_required(login_url="/login/")
 def settings(request):
+    last = request.META.get('HTTP_REFERER', None)
+
+    if request.method == 'POST':
+        firstname       = request.POST.get('firstname')
+        lastname        = request.POST.get('lastname')
+        email           = request.POST.get('email')
+        mobile          = request.POST.get('mobile')
+        about           = request.POST.get('about')
+        profile_image   = request.FILES.get('profile_image')
+
+        print(firstname, lastname, email, mobile, about, profile_image)
+
+        if firstname == "" or is_invalid(firstname):
+            messages.error(request, "Please Enter First Name")
+            return HttpResponseRedirect(last)
+
+        if lastname == "" or is_invalid(lastname):
+            messages.error(request, "Please Enter Last Name")
+            return HttpResponseRedirect(last)
+
+        if email == "" or is_invalid(email):
+            messages.error(request, "Please Enter an Email")
+            return HttpResponseRedirect(last)
+
+        if mobile == "" or is_invalid(mobile):
+            messages.error(request, "Please Enter a Mobile Number")
+            return HttpResponseRedirect(last)
+
+        if about == "" or is_invalid(about):
+            messages.error(request, "Please Write Something In Your Bio")
+            return HttpResponseRedirect(last)
+
+        messages.success(request, 'Profile Information Added Successfully!')
+        return HttpResponseRedirect(last)
+
     return render(request ,'settings.html' )
