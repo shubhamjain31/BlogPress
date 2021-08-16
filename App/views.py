@@ -1,6 +1,7 @@
 from django.shortcuts import render ,redirect, HttpResponseRedirect
 from .form import *
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -216,9 +217,11 @@ def settings(request):
         email           = request.POST.get('email')
         mobile          = request.POST.get('mobile')
         about           = request.POST.get('about')
-        profile_image   = request.FILES.get('profile_image')
+        profile_image   = request.FILES.get('profile_image', '')
 
-        print(firstname, lastname, email, mobile, about, profile_image)
+        if str(profile_image).endswith('.png'):
+            messages.error(request, "Please Upload Logo in .jpg or .jpeg Format")
+            return HttpResponseRedirect(last)
 
         if firstname == "" or is_invalid(firstname):
             messages.error(request, "Please Enter First Name")
@@ -240,7 +243,25 @@ def settings(request):
             messages.error(request, "Please Write Something In Your Bio")
             return HttpResponseRedirect(last)
 
+        user_obj = User.objects.get(pk=request.user.id)
+        user_obj.first_name     = firstname.capitalize()
+        user_obj.last_name      = lastname.capitalize()
+        user_obj.email          = email
+        user_obj.save()
+
+        user_profile = Profile.objects.get(user = user_obj)
+        user_profile.image      = profile_image
+        user_profile.mobile     = mobile
+        user_profile.about      = about.capitalize()
+        user_profile.ip_address = get_ip(request)
+        user_profile.save()
+
         messages.success(request, 'Profile Information Added Successfully!')
         return HttpResponseRedirect(last)
 
-    return render(request ,'settings.html' )
+    user_obj        = User.objects.get(pk=request.user.id)
+    user_profile    = Profile.objects.get(user = user_obj)
+
+    params = {'user_obj':user_obj, 'user_profile':user_profile}
+
+    return render(request ,'settings.html' ,params)

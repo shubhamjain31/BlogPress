@@ -78,15 +78,35 @@
                 	<div class="form-group">
                 		<div class="row">
 	                		<div class="col">
-							    <label for="exampleFormControlFile1">Profile Picture</label>
-							    <input type="file" class="form-control-file" name="profile_image" id="exampleFormControlFile1">
-							</div>
-							<div class="col text-center">
-							  <img src="/media/images/profile.png" class="rounded w-25" alt="profile image">
-							</div>
-						</div>
+        							    <label for="exampleFormControlFile1">Profile Picture</label>
+        							    <input type="file" class="form-control-file" name="profile_image" id="exampleFormControlFile1">
+                          <small class="text-danger">Image(Files allowed: JPG, JPEG)</small>
+        							</div>
+        							<div class="col text-center">
+                        {% if user_profile %}
+                        <img src="{{user_profile.image.url}}" class="rounded w-25" alt="profile image">
+                        {% else %}
+        							  <img src="/media/images/profile.png" class="rounded w-25" alt="profile image">
+                        {% endif %}
+        							</div>
+        						</div>
 
-				  </div>
+        				  </div>
+
+                  {% if user_obj %}
+                  <div class="form-group">
+                    <label for="firstname">First Name</label>
+                    <input type="text" class="form-control" id="firstname" aria-describedby="fullNameHelp" placeholder="Enter your firstname" name="firstname" value="{{user_obj.first_name}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="lastname">Last Name</label>
+                    <input type="text" class="form-control" id="lastname" placeholder="Enter your lastname" name="lastname"value="{{user_obj.last_name}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control" id="email" placeholder="Enter your email" name="email" value="{{user_obj.email}}">
+                  </div>
+                  {% else %}
                   <div class="form-group">
                     <label for="firstname">First Name</label>
                     <input type="text" class="form-control" id="firstname" aria-describedby="fullNameHelp" placeholder="Enter your firstname" name="firstname">
@@ -99,6 +119,18 @@
                     <label for="email">Email</label>
                     <input type="text" class="form-control" id="email" placeholder="Enter your email" name="email">
                   </div>
+                  {% endif %}
+
+                  {% if user_profile %}
+                  <div class="form-group">
+                    <label for="mobile">Mobile</label>
+                    <input type="text" class="form-control" id="mobile" placeholder="Enter your mobile" name="mobile" value="{{user_profile.mobile}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="bio">Your Bio</label>
+                    <textarea class="form-control autosize" id="bio" placeholder="Write something about you" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 62px;" name="about">{{user_profile.about}}</textarea>
+                  </div>
+                  {% else %}
                   <div class="form-group">
                     <label for="mobile">Mobile</label>
                     <input type="text" class="form-control" id="mobile" placeholder="Enter your mobile" name="mobile">
@@ -107,6 +139,8 @@
                     <label for="bio">Your Bio</label>
                     <textarea class="form-control autosize" id="bio" placeholder="Write something about you" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 62px;" name="about"></textarea>
                   </div>
+                  {% endif %}
+
                   <button type="submit" class="btn btn-primary">Update Profile</button>
                   <button type="reset" class="btn btn-light">Reset Changes</button>
                 </form>

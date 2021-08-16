@@ -11,8 +11,10 @@ class Profile(models.Model):
     is_verified 	= models.BooleanField(default=False)
     token 			= models.CharField(max_length=100)
     image           = models.ImageField(upload_to='media/images/', default='media/images/profile.png', blank=True)
-    # about           = models.CharField(max_length=200)
+    about           = models.CharField(max_length=200, blank=True , null=True)
     mobile 			= models.CharField(max_length=15)
+    date_created    = models.DateTimeField(auto_now_add=True)
+    ip_address      = models.CharField(max_length=100)
 
     def __str__(self):
         return str(self.user)
