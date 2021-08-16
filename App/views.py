@@ -49,12 +49,12 @@ def register_view(request):
 
             Profile(user=post).save()
 
-            username = form.cleaned_data.get("username")
-            email    = form.cleaned_data.get("email")
-            raw_password = form.cleaned_data.get("password1")
+            username        = form.cleaned_data.get("username")
+            email           = form.cleaned_data.get("email")
+            raw_password    = form.cleaned_data.get("password1")
 
-            token = encryption_key(post.pk)
-            user = User.objects.get(email=email)
+            token  = encryption_key(post.pk)
+            user   = User.objects.get(email=email)
 
             user     = authenticate(username=username, password=raw_password)
 
@@ -133,11 +133,11 @@ def add_blog(request):
     context = {'form' : BlogForm}
     try:
         if request.method == 'POST':
-            form = BlogForm(request.POST)
+            form    = BlogForm(request.POST)
             
-            image = request.FILES.get('image','')
-            title = request.POST.get('title')
-            user = request.user
+            image   = request.FILES.get('image','')
+            title   = request.POST.get('title')
+            user    = request.user
             
             if form.is_valid():
                 content = form.cleaned_data['content']
