@@ -209,6 +209,7 @@ def profile(request, name):
 
 @login_required(login_url="/login/")
 def settings(request):
+    print('sdsjds',request.POST.get("username_btn", ""),'dwdk')
     last = request.META.get('HTTP_REFERER', None)
 
     if request.method == 'POST':
@@ -257,6 +258,15 @@ def settings(request):
         user_profile.save()
 
         messages.success(request, 'Profile Information Added Successfully!')
+        return HttpResponseRedirect(last)
+
+    elif request.method == 'POST' and request.POST.get("username_btn", "") == 'username_btn':
+        username       = request.POST.get('username')
+        print(username,'')
+
+        if username == "" or is_invalid(username):
+            messages.error(request, "Please Enter User Name")
+            return HttpResponseRedirect(last)
         return HttpResponseRedirect(last)
 
     user_obj        = User.objects.get(pk=request.user.id)

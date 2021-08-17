@@ -141,25 +141,29 @@
                   </div>
                   {% endif %}
 
-                  <button type="submit" class="btn btn-primary">Update Profile</button>
+                  <button type="submit" class="btn btn-primary" name="profile_btn" value="profile_btn">Update Profile</button>
                   <button type="reset" class="btn btn-light">Reset Changes</button>
                 </form>
               </div>
               <div class="tab-pane" id="account">
                 <h6>ACCOUNT SETTINGS</h6>
                 <hr>
-                <form>
+                <form method="post" action="/settings/">{% csrf_token %}
                   <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Enter your username" name="username">
                     <small id="usernameHelp" class="form-text text-muted">After changing your username, your old username becomes available for anyone else to claim.</small>
+
+                    <button name="username_btn" value="username_btn" class="btn btn-success m-2" type="button">Save</button>
                   </div>
+                  </form>
                   <hr>
+                  <form>
                   <div class="form-group">
                     <label class="d-block text-danger">Delete Account</label>
                     <p class="text-muted font-size-sm">Once you delete your account, there is no going back. Please be certain.</p>
                   </div>
-                  <button class="btn btn-danger" type="button">Delete Account</button>
+                  <button type="submit" class="btn btn-danger" type="button">Delete Account</button>
                 </form>
               </div>
               <div class="tab-pane" id="security">
