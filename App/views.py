@@ -209,10 +209,11 @@ def profile(request, name):
 
 @login_required(login_url="/login/")
 def settings(request):
-    print('sdsjds',request.POST.get("username_btn", ""),'dwdk')
     last = request.META.get('HTTP_REFERER', None)
 
-    if request.method == 'POST':
+    user_obj = User.objects.get(pk=request.user.id)
+
+    if request.method == 'POST' and request.POST.get("profile_btn", "") == 'profile_btn':
         firstname       = request.POST.get('firstname')
         lastname        = request.POST.get('lastname')
         email           = request.POST.get('email')
@@ -244,7 +245,6 @@ def settings(request):
             messages.error(request, "Please Write Something In Your Bio")
             return HttpResponseRedirect(last)
 
-        user_obj = User.objects.get(pk=request.user.id)
         user_obj.first_name     = firstname.capitalize()
         user_obj.last_name      = lastname.capitalize()
         user_obj.email          = email
@@ -257,16 +257,49 @@ def settings(request):
         user_profile.ip_address = get_ip(request)
         user_profile.save()
 
-        messages.success(request, 'Profile Information Added Successfully!')
+        messages.success(request, 'Profile Information Updated Successfully!')
         return HttpResponseRedirect(last)
 
     elif request.method == 'POST' and request.POST.get("username_btn", "") == 'username_btn':
         username       = request.POST.get('username')
-        print(username,'')
 
         if username == "" or is_invalid(username):
-            messages.error(request, "Please Enter User Name")
+            messages.error(request, "Please Enter User name")
             return HttpResponseRedirect(last)
+
+        user_obj.username     = username
+        user_obj.save()
+        messages.success(request, 'Account Settings Updated Successfully!')
+        return HttpResponseRedirect(last)
+
+    elif request.method == 'POST' and request.POST.get("change_password_btn", "") == 'change_password_btn':
+        old_password            = request.POST.get('old_password')
+        new_password            = request.POST.get('new_password')
+        confirm_password        = request.POST.get('confirm_password')
+
+        if old_password == "" or is_invalid(old_password):
+            messages.error(request, "Please Enter Old Password")
+            return HttpResponseRedirect(last)
+
+        if new_password == "" or is_invalid(new_password):
+            messages.error(request, "Please Enter New Password")
+            return HttpResponseRedirect(last)
+
+        if confirm_password == "" or is_invalid(confirm_password):
+            messages.error(request, "Please Enter Confirm Password")
+            return HttpResponseRedirect(last)
+
+        if len(new_password) < 8 or len(confirm_password) < 8:
+            messages.error(request, "Your Password Must Contain Atleast 8 Characters.")
+            return HttpResponseRedirect(last)
+
+        if new_password != confirm_password:
+            messages.error(request, "New Password and Confirm Password must be Match.")
+            return HttpResponseRedirect(last)
+
+        user_obj.set_password(new_password)
+        user_obj.save()
+        messages.success(request, "Security Settings Updated Successfully!")
         return HttpResponseRedirect(last)
 
     user_obj        = User.objects.get(pk=request.user.id)

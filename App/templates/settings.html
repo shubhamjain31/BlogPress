@@ -150,11 +150,15 @@
                 <hr>
                 <form method="post" action="/settings/">{% csrf_token %}
                   <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="username">Username*</label>
+                    {% if user_obj %}
+                    <input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Enter your username" name="username" value="{{user_obj.username}}">
+                    {% else %}
                     <input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Enter your username" name="username">
+                    {% endif %}
                     <small id="usernameHelp" class="form-text text-muted">After changing your username, your old username becomes available for anyone else to claim.</small>
 
-                    <button name="username_btn" value="username_btn" class="btn btn-success m-2" type="button">Save</button>
+                    <button name="username_btn" value="username_btn" class="btn btn-success m-2" type="submit">Save</button>
                   </div>
                   </form>
                   <hr>
@@ -169,14 +173,14 @@
               <div class="tab-pane" id="security">
                 <h6>SECURITY SETTINGS</h6>
                 <hr>
-                <form>
+                <form method="post" action="/settings/">{% csrf_token %}
                   <div class="form-group">
                     <label class="d-block">Change Password</label>
-                    <input type="text" class="form-control" placeholder="Enter your old password">
-                    <input type="text" class="form-control mt-1" placeholder="New password">
-                    <input type="text" class="form-control mt-1" placeholder="Confirm new password">
+                    <input type="password" class="form-control" placeholder="Enter your old password" name="old_password">
+                    <input type="password" class="form-control mt-1" placeholder="New password" name="new_password">
+                    <input type="password" class="form-control mt-1" placeholder="Confirm new password" name="confirm_password">
                   </div>
-                  <button class="btn btn-success" type="button">Change Password</button>
+                  <button class="btn btn-success" type="submit" name="change_password_btn" value="change_password_btn">Change Password</button>
                 </form>
                 
               </div>
