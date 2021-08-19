@@ -128,7 +128,7 @@
                   </div>
                   <div class="form-group">
                     <label for="bio">Your Bio</label>
-                    <textarea class="form-control autosize" id="bio" placeholder="Write something about you" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 62px;" name="about">{{user_profile.about}}</textarea>
+                    <textarea class="form-control autosize" id="bio" placeholder="Write something about you" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 62px;" name="about">{{user_profile.about|default:""}}</textarea>
                   </div>
                   {% else %}
                   <div class="form-group">
@@ -162,12 +162,12 @@
                   </div>
                   </form>
                   <hr>
-                  <form>
-                  <div class="form-group">
-                    <label class="d-block text-danger">Delete Account</label>
-                    <p class="text-muted font-size-sm">Once you delete your account, there is no going back. Please be certain.</p>
-                  </div>
-                  <button type="submit" class="btn btn-danger" type="button">Delete Account</button>
+                  <form >
+                    <div class="form-group">
+                      <label class="d-block text-danger">Delete Account</label>
+                      <p class="text-muted font-size-sm">Once you delete your account, there is no going back. Please be certain.</p>
+                    </div>
+                    <button type="button" id="delete_btn" class="btn btn-danger delete">Delete Account</button>
                 </form>
               </div>
               <div class="tab-pane" id="security">
@@ -192,9 +192,43 @@
 
     </div>
 
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Delete Account</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Do you want to delete your account <b><span id="modal_body"></span></b>?
+            </div>
+            <div class="modal-footer">
+              <a href="" class="btn btn-secondary btn-sm" data-dismiss="modal">No</a>
+              <form method="post" action="/settings/">{% csrf_token %}
+                <button id="delete_button" class="btn btn-primary btn-sm" name="delete_btn" value="delete_btn">Yes</button>
+              </form>
+            </div>
+          </div>
+        </div>
+    </div>
+
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 
+{% endblock %}
+
+{% block js %}
+<script>
+  $("#delete_btn").on('click', function () {
+
+  $('#deleteModal').modal('show');
+  
+  });
+</script>
 {% endblock %}

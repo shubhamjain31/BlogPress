@@ -302,6 +302,13 @@ def settings(request):
         messages.success(request, "Security Settings Updated Successfully!")
         return HttpResponseRedirect(last)
 
+    elif request.method == 'POST' and request.POST.get("delete_btn", "") == 'delete_btn':
+        user_obj.delete()
+        logout(request)
+        messages.success(request, "Account Deleted Successfully!")
+        return HttpResponseRedirect('/login/')
+    
+
     user_obj        = User.objects.get(pk=request.user.id)
     user_profile    = Profile.objects.get(user = user_obj)
 
