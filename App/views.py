@@ -214,7 +214,11 @@ def blog_delete(request ,id):
 
 @login_required(login_url="/login/")
 def profile(request, name):
-    return render(request ,'profile.html' )
+    user_obj = User.objects.get(pk=request.user.pk)
+
+    user_profile = Profile.objects.get(user=user_obj)
+    params = {'user_profile':user_profile}
+    return render(request ,'profile.html' ,params)
 
 @login_required(login_url="/login/")
 def settings(request):

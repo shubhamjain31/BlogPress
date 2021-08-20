@@ -83,7 +83,7 @@
                           <small class="text-danger">Image(Files allowed: JPG, JPEG)</small>
         							</div>
         							<div class="col text-center">
-                        {% if user_profile %}
+                        {% if user_profile.image %}
                         <img src="{{user_profile.image.url}}" class="rounded w-25" alt="profile image">
                         {% else %}
         							  <img src="/media/images/profile.png" class="rounded w-25" alt="profile image">
