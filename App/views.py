@@ -14,6 +14,7 @@ from cryptography.fernet import Fernet
 from cryptography import *
 import cryptography
 from django.core.mail import EmailMessage
+from django.db.models import Q
 
 # Create your views here.
 
@@ -30,6 +31,8 @@ def login_view(request):
     return render(request ,'login.html')
 
 def register_view(request):
+    last = request.META.get('HTTP_REFERER', None)
+
     if request.user.is_authenticated:
         return redirect('/')
 
@@ -45,17 +48,23 @@ def register_view(request):
             return render(request, "register.html", {"form": form, "msg" : msg, "success" : success })
 
         if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-
-            Profile(user=post).save()
 
             username        = form.cleaned_data.get("username")
             email           = form.cleaned_data.get("email")
             raw_password    = form.cleaned_data.get("password1")
 
+            if User.objects.filter(email=email).exists():
+                print('teur')
+                messages.error(request, 'Email Already Exists!')
+                return HttpResponseRedirect(last)
+            print('fjdfj')
+
+            post = form.save(commit=False)
+            post.save()
+
+            Profile(user=post).save()
+
             token  = encryption_key(post.pk)
-            user   = User.objects.get(email=email)
 
             user     = authenticate(username=username, password=raw_password)
 
