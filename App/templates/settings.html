@@ -74,7 +74,7 @@
                 {% endif %}
                 
                 <hr>
-                <form method="post" action="/settings/" enctype="multipart/form-data">{% csrf_token %}
+                <form method="post" action="/settings/" enctype="multipart/form-data" id="profile_form">{% csrf_token %}
                 	<div class="form-group">
                 		<div class="row">
 	                		<div class="col">
@@ -142,7 +142,7 @@
                   {% endif %}
 
                   <button type="submit" class="btn btn-primary" name="profile_btn" value="profile_btn">Update Profile</button>
-                  <button type="reset" class="btn btn-light">Reset Changes</button>
+                  <button type="button" class="btn btn-light reset_btn" id="reset_btn">Reset Changes</button>
                 </form>
               </div>
               <div class="tab-pane" id="account">
@@ -231,4 +231,5 @@
   
   });
 </script>
+<script src="/media/js/settings.js"> </script>
 {% endblock %}
